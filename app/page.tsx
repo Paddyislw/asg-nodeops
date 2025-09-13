@@ -1,103 +1,224 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useAccount } from "wagmi";
+import { useState } from "react";
+import { BRIDGE_CHAINS } from "@/lib/constants";
+import { TOKENS } from "@/lib/constants";
+import { useReadContract } from "wagmi";
+import type { Address } from "viem";
+import { formatAmount } from "@/lib/helper";
+import { ArrowRightLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { HistoryList } from "@/components/bridge/HistoryList";
+import { TokenPicker } from "@/components/bridge/TokenPicker";
+import { NextBtn } from "@/components/bridge/NextBtn";
+import { BackBtn } from "@/components/bridge/BackBtn";
+import { ChainPicker } from "@/components/bridge/ChainPicker";
+import { WizardHeader } from "@/components/bridge/WizardHeader";
+import { ReviewCard } from "@/components/bridge/ReviewCard";
+import { AmountInput } from "@/components/bridge/AmountInput";
+import { useBridgeHistory } from "@/hooks/useBridgeHistory";
+import { ERC20_ABI } from "@/abi/bridge-abi";
+
+const CHAINS = Object.values(BRIDGE_CHAINS);
+
+export default function BridgePage() {
+  const { address, isConnected } = useAccount();
+  const { history, isLoadingHistory, executeBridge } = useBridgeHistory();
+
+  const [step, setStep] = useState(1);
+  const [fromChainId, setFrom] = useState(CHAINS[0].id);
+  const [toChainId, setTo] = useState(CHAINS[1].id);
+
+  const tokensOnFrom = TOKENS[fromChainId] || [];
+  const [token, setToken] = useState(
+    tokensOnFrom[0]?.address as Address | undefined
+  );
+  const [amount, setAmount] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState("");
+
+  // balance read
+  const { data: balanceRaw } = useReadContract({
+    abi: ERC20_ABI,
+    address: token,
+    functionName: "balanceOf",
+    args: [address as Address],
+    chainId: fromChainId,
+    query: { enabled: Boolean(address && token) },
+  });
+
+
+  const decimals = tokensOnFrom.find((t) => t.address === token)?.decimals ?? 6;
+  const balance = balanceRaw
+    ? formatAmount(balanceRaw as bigint, decimals)
+    : "0";
+
+  function swapChains() {
+    setFrom(toChainId);
+    setTo(fromChainId);
+    setToken(undefined);
+  }
+
+  function reset() {
+    setStep(1);
+    setAmount("");
+    setToken(TOKENS[fromChainId]?.[0]?.address as Address);
+  }
+
+  async function handleExecuteBridge() {
+    if (!address || !token) return;
+
+    setIsProcessing(true);
+    setError("");
+
+    try {
+      const tokenInfo = TOKENS[fromChainId]?.find((t) => t.address === token);
+      if (!tokenInfo) throw new Error("Token not found");
+
+      await executeBridge(
+        fromChainId,
+        toChainId,
+        token,
+        amount,
+        tokenInfo.decimals
+      );
+
+      setStep(4);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Bridge failed:", err);
+      setError(errorMessage || "Bridge transaction failed");
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
+      <div className="rounded-xl2 bg-[#1a1c1c] p-5 shadow-soft">
+        <WizardHeader step={step} />
+        {/* Step 1 */}
+        {step === 1 && (
+          <div className="space-y-4">
+            <ChainPicker
+              label="From"
+              value={fromChainId}
+              onChange={(v) => {
+                setFrom(v as any);
+                setToken(TOKENS[v]?.[0]?.address as Address);
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <ChainPicker
+              label="To"
+              value={toChainId}
+              onChange={(v) => setTo(v as any)}
+              exclude={fromChainId}
+            />
+            <button
+              onClick={swapChains}
+              className="w-full rounded-xl2 border border-white/10 bg-transparent py-2 text-sm hover:bg-white/5"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <ArrowRightLeft size={16} /> Swap
+              </div>
+            </button>
+            <div className="pt-2">
+              <NextBtn
+                enabled={isConnected && fromChainId !== toChainId}
+                onClick={() => setStep(2)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 2 */}
+        {step === 2 && (
+          <div className="space-y-4">
+            <TokenPicker
+              chainId={fromChainId}
+              value={token}
+              onChange={setToken}
+            />
+            <AmountInput
+              value={amount}
+              onChange={setAmount}
+              balance={balance}
+              onMax={() => setAmount(balance)}
+            />
+            <div className="flex gap-3">
+              <BackBtn onClick={() => setStep(1)} />
+              <NextBtn
+                enabled={!!amount && Number(amount) > 0}
+                onClick={() => setStep(3)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 3 */}
+        {step === 3 && (
+          <div className="space-y-4">
+            <ReviewCard
+              fromChainId={fromChainId}
+              toChainId={toChainId}
+              token={token!}
+              amount={amount}
+            />
+            {error && (
+              <div className="rounded-xl2 border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
+                <div className="flex items-center gap-2">
+                  <AlertCircle size={16} />
+                  <span>{error}</span>
+                </div>
+              </div>
+            )}
+            <div className="flex gap-3">
+              <BackBtn onClick={() => setStep(2)} />
+              <button
+                onClick={handleExecuteBridge}
+                disabled={isProcessing}
+                className={`flex-1 rounded-xl2 px-4 py-3 font-semibold ${
+                  isProcessing
+                    ? "bg-white/10 text-white/40 cursor-not-allowed"
+                    : "bg-[#eaf740] text-black hover:opacity-90"
+                }`}
+              >
+                {isProcessing ? "Processing..." : "Bridge Tokens"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4 */}
+        {step === 4 && (
+          <div className="space-y-4">
+            <div className="rounded-xl2 border border-white/10 bg-black/30 p-4">
+              <p className="text-lg font-semibold flex items-center gap-2">
+                <CheckCircle2 className="text-[#eaf740]" /> Bridge Submitted
+              </p>
+              <p className="text-white/70 text-sm mt-1">
+                Your tokens are being bridged. The status will update
+                automatically when the bridge completes.
+              </p>
+            </div>
+            <button
+              onClick={reset}
+              className="w-full rounded-xl2 border border-white/10 py-2 text-sm hover:bg-white/5"
+            >
+              New Bridge
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-xl2 bg-[#1a1c1c] p-5 shadow-soft">
+        <h3 className="mb-2 text-sm font-medium text-white/70">
+          Bridge History
+        </h3>
+        <HistoryList items={history} isLoading={isLoadingHistory} />
+      </div>
     </div>
   );
 }
+
