@@ -24,6 +24,8 @@ export interface BridgeParams {
   decimals: number;
 }
 
+export type BridgeStatusCallback = (status: string, description?: string) => void;
+
 export interface BridgeResult {
   txHash: Hash;
   nonce: bigint;
@@ -31,12 +33,17 @@ export interface BridgeResult {
 }
 
 export class BridgeService {
-  static async initiateBridge(params: BridgeParams): Promise<BridgeResult> {
+  static async initiateBridge(
+    params: BridgeParams,
+    onStatusUpdate?: BridgeStatusCallback
+  ): Promise<BridgeResult> {
     const { fromChainId, toChainId, token, amount, recipient, decimals } =
       params;
 
     console.log('🚀 Starting bridge transaction');
     console.log('Bridge params:', { fromChainId, toChainId, token, amount, recipient });
+
+    onStatusUpdate?.('initializing', 'Preparing bridge transaction');
 
     const tokenMessenger = CCTP_TOKEN_MESSENGER_CONTRACTS[fromChainId];
     console.log('TokenMessenger address:', tokenMessenger);
@@ -68,6 +75,7 @@ export class BridgeService {
 
     try {
       console.log('📝 Step 1: Approving USDC spend');
+      onStatusUpdate?.('approving', 'Authorizing the bridge contract to spend your USDC tokens');
       // STEP 1: APPROVAL
       const approveTx = await writeContract(config, {
         abi: ERC20_ABI,
@@ -80,14 +88,17 @@ export class BridgeService {
 
       // Wait for approval to be mined
       console.log('⏳ Waiting for approval confirmation...');
+      onStatusUpdate?.('approving', 'Waiting for USDC approval confirmation...');
       await waitForTransactionReceipt(config, {
         hash: approveTx,
         chainId: fromChainId as any,
         timeout: 60_000,
       });
       console.log('✅ Approval confirmed');
+      onStatusUpdate?.('approved', 'USDC spending authorization confirmed on blockchain');
 
       console.log('🔥 Step 2: Calling depositForBurn');
+      onStatusUpdate?.('bridging', 'Calling depositForBurn to start the cross-chain transfer');
       // STEP 2: DepositForBurn
       const mintRecipient = pad(recipient, { size: 32 });
       console.log('Recipient (bytes32):', mintRecipient);
@@ -103,6 +114,7 @@ export class BridgeService {
 
       // STEP 3: Wait for receipt
       console.log('⏳ Waiting for transaction confirmation...');
+      onStatusUpdate?.('waiting_confirmation', 'Waiting for transaction to be confirmed on source chain');
       const receipt = await waitForTransactionReceipt(config, {
         hash: bridgeTx,
         chainId: fromChainId as any,
@@ -116,12 +128,14 @@ export class BridgeService {
 
       // Extract messageHash from MessageSent event
       console.log('🔍 Extracting messageHash from logs...');
+      onStatusUpdate?.('extracting_hash', 'Extracting message hash from transaction logs');
       const { nonce, messageHash } = this.extractMessageHashFromLogs(
         receipt.logs
       );
       console.log('✅ Bridge initiated successfully!');
       console.log('Nonce:', nonce.toString());
       console.log('Message hash:', messageHash);
+      onStatusUpdate?.('completed', 'Bridge transaction submitted successfully. Tokens will arrive shortly.');
 
       return {
         txHash: bridgeTx,
@@ -130,6 +144,7 @@ export class BridgeService {
       };
     } catch (error) {
       console.error('❌ Bridge transaction failed:', error);
+      onStatusUpdate?.('failed', `Bridge transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       throw error;
     }
   }

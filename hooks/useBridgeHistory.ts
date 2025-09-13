@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import type { Address } from "viem";
 import { useAccount } from "wagmi";
 import { getStatusText } from "@/lib/helper";
 import { BridgeHistory } from "@/services/BirdgeHistory";
 import { BridgeManager } from "@/services/BridgeManager";
-import { BridgeService } from "@/services/BridgeService";
-import { BridgeRecord } from "@/types/bridge";
+import { BridgeService, BridgeStatusCallback } from "@/services/BridgeService";
+import { BridgeRecord, BridgeResult } from "@/types/bridge";
 
-export function useBridgeHistory() {
+export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
   const { address } = useAccount();
   const [history, setHistory] = useState<BridgeRecord[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -148,9 +148,23 @@ export function useBridgeHistory() {
       decimals: tokenDecimals,
     };
 
-    const result = await BridgeManager.initiateBridge(bridgeParams, address);
+    // Use BridgeService directly with status callback
+    const result = await BridgeService.initiateBridge(bridgeParams, onStatusUpdate);
 
-    console.log("✅ Bridge initiated and recorded:", result);
+    // Record in contract using BridgeManager
+    try {
+      await BridgeManager.recordExistingBridge(
+        fromChainId,
+        bridgeParams,
+        result,
+        address
+      );
+      console.log("✅ Bridge recorded in contract successfully");
+    } catch (error) {
+      console.warn("⚠️ Failed to record in contract, but bridge was successful:", error);
+    }
+
+    console.log("✅ Bridge initiated:", result);
 
     const rec: BridgeRecord = {
       id: result.bridgeId,
@@ -176,5 +190,13 @@ export function useBridgeHistory() {
     executeBridge,
     monitorBridgeStatus,
     monitorBridgeStatusInitial,
+    setHistory,
+  } as {
+    history: BridgeRecord[];
+    isLoadingHistory: boolean;
+    executeBridge: (fromChainId: number, toChainId: number, token: Address, amount: string, tokenDecimals: number) => Promise<BridgeResult | null>;
+    monitorBridgeStatus: (messageHash: string) => Promise<void>;
+    monitorBridgeStatusInitial: (record: BridgeRecord) => Promise<BridgeRecord>;
+    setHistory: Dispatch<SetStateAction<BridgeRecord[]>>;
   };
 }

@@ -7,7 +7,7 @@ import { TOKENS } from "@/lib/constants";
 import { useReadContract } from "wagmi";
 import type { Address } from "viem";
 import { formatAmount } from "@/lib/helper";
-import { ArrowRightLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowRightLeft, CheckCircle2 } from "lucide-react";
 import { HistoryList } from "@/components/bridge/HistoryList";
 import { TokenPicker } from "@/components/bridge/TokenPicker";
 import { NextBtn } from "@/components/bridge/NextBtn";
@@ -16,6 +16,7 @@ import { ChainPicker } from "@/components/bridge/ChainPicker";
 import { WizardHeader } from "@/components/bridge/WizardHeader";
 import { ReviewCard } from "@/components/bridge/ReviewCard";
 import { AmountInput } from "@/components/bridge/AmountInput";
+import { StatusIndicator, type BridgeStatus } from "@/components/bridge/StatusIndicator";
 import { useBridgeHistory } from "@/hooks/useBridgeHistory";
 import { ERC20_ABI } from "@/abi/bridge-abi";
 
@@ -23,7 +24,14 @@ const CHAINS = Object.values(BRIDGE_CHAINS);
 
 export default function BridgePage() {
   const { address, isConnected } = useAccount();
-  const { history, isLoadingHistory, executeBridge } = useBridgeHistory();
+
+  // Create status callback to update the UI
+  const onStatusUpdate = (status: string, description?: string) => {
+    setBridgeStatus(status as BridgeStatus);
+    console.log(`🔄 Bridge Status: ${status} - ${description || ''}`);
+  };
+
+  const { history, isLoadingHistory, executeBridge } = useBridgeHistory(onStatusUpdate);
 
   const [step, setStep] = useState(1);
   const [fromChainId, setFrom] = useState(CHAINS[0].id);
@@ -36,6 +44,7 @@ export default function BridgePage() {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
+  const [bridgeStatus, setBridgeStatus] = useState<BridgeStatus>("idle");
 
   // balance read
   const { data: balanceRaw } = useReadContract({
@@ -63,6 +72,9 @@ export default function BridgePage() {
     setStep(1);
     setAmount("");
     setToken(TOKENS[fromChainId]?.[0]?.address as Address);
+    setBridgeStatus("idle");
+    setError("");
+    setIsProcessing(false);
   }
 
   async function handleExecuteBridge() {
@@ -70,6 +82,7 @@ export default function BridgePage() {
 
     setIsProcessing(true);
     setError("");
+    setBridgeStatus("initializing");
 
     try {
       const tokenInfo = TOKENS[fromChainId]?.find((t) => t.address === token);
@@ -83,15 +96,18 @@ export default function BridgePage() {
         tokenInfo.decimals
       );
 
+      setBridgeStatus("completed");
       setStep(4);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       console.error("Bridge failed:", err);
       setError(errorMessage || "Bridge transaction failed");
+      setBridgeStatus("failed");
     } finally {
       setIsProcessing(false);
     }
   }
+
 
 
   return (
@@ -105,14 +121,14 @@ export default function BridgePage() {
               label="From"
               value={fromChainId}
               onChange={(v) => {
-                setFrom(v as any);
+                setFrom(v as typeof fromChainId);
                 setToken(TOKENS[v]?.[0]?.address as Address);
               }}
             />
             <ChainPicker
               label="To"
               value={toChainId}
-              onChange={(v) => setTo(v as any)}
+              onChange={(v) => setTo(v as typeof toChainId)}
               exclude={fromChainId}
             />
             <button
@@ -165,20 +181,27 @@ export default function BridgePage() {
               token={token!}
               amount={amount}
             />
-            {error && (
-              <div className="rounded-xl2 border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
-                <div className="flex items-center gap-2">
-                  <AlertCircle size={16} />
-                  <span>{error}</span>
-                </div>
-              </div>
-            )}
-            <div className="flex gap-3">
-              <BackBtn onClick={() => setStep(2)} />
+
+            {/* Status Indicator */}
+            <StatusIndicator
+              currentStatus={bridgeStatus}
+              error={error}
+            />
+
+            <div className={`flex gap-3 ${isProcessing ? "" : ""}`}>
+              {!isProcessing && (
+                <BackBtn
+                  onClick={() => {
+                    setStep(2);
+                    setBridgeStatus("idle");
+                    setError("");
+                  }}
+                />
+              )}
               <button
                 onClick={handleExecuteBridge}
                 disabled={isProcessing}
-                className={`flex-1 rounded-xl2 px-4 py-3 font-semibold ${
+                className={`${isProcessing ? "w-full" : "flex-1"} rounded-xl2 px-4 py-3 font-semibold ${
                   isProcessing
                     ? "bg-white/10 text-white/40 cursor-not-allowed"
                     : "bg-[#eaf740] text-black hover:opacity-90"
