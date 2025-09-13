@@ -1,31 +1,32 @@
-import { BRIDGE_CHAINS } from "@/lib/constants";
+"use client"
+
+import { BRIDGE_CHAINS } from "@/lib/constants"
 
 export function ChainPicker({
   label,
-  value,
-  onChange,
-  exclude,
+  type,
 }: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-  exclude?: number;
+  label: string
+  type: "from" | "to"
 }) {
-  const CHAINS = Object.values(BRIDGE_CHAINS);
+  const chain = type === "from" ? BRIDGE_CHAINS.sepolia : BRIDGE_CHAINS.baseSepolia
+
   return (
-    <div>
-      <label className="mb-1 block text-sm text-white/70">{label} Chain</label>
-      <select
-        className="w-full rounded-xl2 border border-white/10 bg-black/40 px-3 py-2"
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-      >
-        {CHAINS.filter((c) => c.id !== exclude).map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
-          </option>
-        ))}
-      </select>
+    <div className="space-y-3">
+      <label className="block text-sm font-medium text-slate-300">{label} Chain</label>
+
+      <div className="grid gap-3">
+        <div className="w-full p-4 rounded-xl border shadow-sm text-left border-slate-600/50 bg-slate-700/30 hover:border-slate-500/50 hover:bg-slate-600/30">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-primary"></div>
+              <div>
+                <div className="font-medium text-white">{chain.name}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
