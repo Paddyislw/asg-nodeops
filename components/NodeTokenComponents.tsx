@@ -58,7 +58,7 @@ interface NodeStatusCardProps {
 export function NodeStatusCard({ nodeData, loading }: NodeStatusCardProps) {
   if (loading) {
     return (
-      <div className="rounded-xl2 bg-[#1a1c1c] p-4 shadow-soft animate-pulse">
+      <div className="rounded-xl2 bg-card p-4 shadow-soft animate-pulse">
         <div className="h-6 bg-white/10 rounded mb-2"></div>
         <div className="h-4 bg-white/5 rounded"></div>
       </div>
@@ -67,7 +67,7 @@ export function NodeStatusCard({ nodeData, loading }: NodeStatusCardProps) {
 
   if (!nodeData || nodeData.tier === "NONE") {
     return (
-      <div className="rounded-xl2 bg-[#1a1c1c] p-4 shadow-soft border border-white/10">
+      <div className="rounded-xl2 bg-card p-4 shadow-soft border border-white/10">
         <div className="flex items-center gap-3 mb-3">
           <Crown className="text-white/40" size={20} />
           <div>
@@ -103,7 +103,7 @@ export function NodeStatusCard({ nodeData, loading }: NodeStatusCardProps) {
 
   return (
     <div
-      className={`rounded-xl2 bg-[#1a1c1c] p-4 shadow-soft border ${style.border} ${style.bg}`}
+      className={`rounded-xl2 bg-card p-4 shadow-soft border ${style.border} ${style.bg}`}
     >
       <div className="flex items-center gap-3 mb-3">
         <div className="text-xl">{style.icon}</div>
@@ -198,7 +198,7 @@ export function AnalyticsDashboard({
 }: AnalyticsDashboardProps) {
   if (!hasAccess) {
     return (
-      <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft text-center">
+      <div className="rounded-xl2 bg-card p-6 shadow-soft text-center">
         <BarChart3 className="mx-auto mb-3 text-white/40" size={48} />
         <h3 className="font-semibold mb-2">Analytics Dashboard</h3>
         <p className="text-white/60 text-sm mb-4">
@@ -212,9 +212,9 @@ export function AnalyticsDashboard({
   }
 
   return (
-    <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft">
+    <div className="rounded-xl2 bg-card p-6 shadow-soft">
       <div className="flex items-center gap-2 mb-4">
-        <BarChart3 className="text-[#eaf740]" size={20} />
+        <BarChart3 className="text-primary" size={20} />
         <h3 className="font-semibold">Analytics Dashboard</h3>
       </div>
 
@@ -375,7 +375,7 @@ export function TierProgress({
 
       <div className="w-full bg-white/10 rounded-full h-2 mb-2">
         <div
-          className="bg-gradient-to-r from-[#eaf740] to-yellow-400 h-2 rounded-full transition-all duration-300"
+          className="bg-gradient-to-r from-primary to-yellow-400 h-2 rounded-full transition-all duration-300"
           style={{ width: `${Math.min(progress, 100)}%` }}
         />
       </div>

@@ -125,7 +125,7 @@ export default function NodeDashboardPage() {
       {/* Header */}
       <div className="text-center py-8">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <Sparkles className="text-[#eaf740]" size={32} />
+          <Sparkles className="text-primary" size={32} />
           <h1 className="text-3xl font-bold">$NODE Token Dashboard</h1>
         </div>
         <p className="text-white/60 max-w-2xl mx-auto">
@@ -155,7 +155,7 @@ export default function NodeDashboardPage() {
           onClick={() => setActiveTab("overview")}
           className={`px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
             activeTab === "overview"
-              ? "bg-[#eaf740] text-black"
+              ? "bg-primary text-black"
               : "text-white/70 hover:text-white"
           }`}
         >
@@ -166,7 +166,7 @@ export default function NodeDashboardPage() {
           onClick={() => setActiveTab("analytics")}
           className={`px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
             activeTab === "analytics"
-              ? "bg-[#eaf740] text-black"
+              ? "bg-primary text-black"
               : "text-white/70 hover:text-white"
           } ${!hasAnalyticsAccess ? "opacity-50 cursor-not-allowed" : ""}`}
           disabled={!hasAnalyticsAccess}
@@ -179,7 +179,7 @@ export default function NodeDashboardPage() {
           onClick={() => setActiveTab("benefits")}
           className={`px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
             activeTab === "benefits"
-              ? "bg-[#eaf740] text-black"
+              ? "bg-primary text-black"
               : "text-white/70 hover:text-white"
           }`}
         >
@@ -192,9 +192,9 @@ export default function NodeDashboardPage() {
       {activeTab === "overview" && (
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Token Information */}
-          <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft">
+          <div className="rounded-xl2 bg-card p-6 shadow-soft">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Info size={20} className="text-[#eaf740]" />
+              <Info size={20} className="text-primary" />
               Token Information
             </h3>
 
@@ -226,7 +226,7 @@ export default function NodeDashboardPage() {
               {nodeData && (
                 <div className="bg-black/30 rounded-lg p-4">
                   <div className="text-sm text-white/60 mb-1">Your Balance</div>
-                  <div className="text-2xl font-bold text-[#eaf740]">
+                  <div className="text-2xl font-bold text-primary">
                     {formatAmount(
                       nodeData.balance,
                       CURRENT_NODE_CONFIG.decimals
@@ -244,9 +244,9 @@ export default function NodeDashboardPage() {
           </div>
 
           {/* Quick Stats */}
-          <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft">
+          <div className="rounded-xl2 bg-card p-6 shadow-soft">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <TrendingUp size={20} className="text-[#eaf740]" />
+              <TrendingUp size={20} className="text-primary" />
               Quick Stats
             </h3>
 
@@ -326,9 +326,9 @@ export default function NodeDashboardPage() {
         <div className="space-y-6">
           {/* Bridge Analytics Overview */}
           {hasAnalyticsAccess && totalTxns > 0 && (
-            <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft">
+            <div className="rounded-xl2 bg-card p-6 shadow-soft">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Activity size={20} className="text-[#eaf740]" />
+                <Activity size={20} className="text-primary" />
                 Live Bridge Analytics (Sepolia ↔ Base Sepolia)
               </h3>
 
@@ -394,7 +394,7 @@ export default function NodeDashboardPage() {
                                   href={`https://sepolia.etherscan.io/tx/${txn.txHash}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-[#eaf740] hover:text-[#eaf740]/80 underline transition-colors"
+                                  className="text-primary hover:text-primary/80 underline transition-colors"
                                 >
                                   View Transaction
                                 </a>
@@ -429,9 +429,9 @@ export default function NodeDashboardPage() {
         <div className="space-y-6">
           {/* Current Benefits */}
           {nodeData && nodeData.tier !== "NONE" && (
-            <div className="rounded-xl2 bg-[#1a1c1c] p-6 shadow-soft">
+            <div className="rounded-xl2 bg-card p-6 shadow-soft">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Award size={20} className="text-[#eaf740]" />
+                <Award size={20} className="text-primary" />
                 Your Current Benefits ({nodeData.tier} Tier)
               </h3>
 
@@ -499,9 +499,9 @@ export default function NodeDashboardPage() {
                 return (
                   <div
                     key={tier}
-                    className={`rounded-xl2 bg-[#1a1c1c] p-4 shadow-soft border ${
+                    className={`rounded-xl2 bg-card p-4 shadow-soft border ${
                       isCurrentTier
-                        ? "border-[#eaf740] bg-[#eaf740]/5"
+                        ? "border-primary bg-primary/5"
                         : "border-white/10"
                     }`}
                   >
@@ -562,7 +562,7 @@ export default function NodeDashboardPage() {
                     </div>
 
                     {isCurrentTier && (
-                      <div className="mt-3 p-2 bg-[#eaf740]/20 rounded text-center text-xs text-[#eaf740]">
+                      <div className="mt-3 p-2 bg-primary/20 rounded text-center text-xs text-primary">
                         Current Tier
                       </div>
                     )}
@@ -575,8 +575,8 @@ export default function NodeDashboardPage() {
 
       {/* Call to Action for Non-Holders */}
       {(!nodeData || nodeData.tier === "NONE") && (
-        <div className="rounded-xl2 bg-gradient-to-r from-[#eaf740]/10 to-yellow-400/10 border border-[#eaf740]/20 p-6 text-center">
-          <Crown className="mx-auto mb-4 text-[#eaf740]" size={48} />
+        <div className="rounded-xl2 bg-gradient-to-r from-primary/10 to-yellow-400/10 border border-primary/20 p-6 text-center">
+          <Crown className="mx-auto mb-4 text-primary" size={48} />
           <h3 className="text-xl font-semibold mb-2">Unlock $NODE Benefits</h3>
           <p className="text-white/70 mb-4 max-w-2xl mx-auto">
             Hold $NODE tokens to unlock exclusive benefits including fee

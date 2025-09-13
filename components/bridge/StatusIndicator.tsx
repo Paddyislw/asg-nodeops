@@ -117,14 +117,14 @@ export function StatusIndicator({ currentStatus, error }: StatusIndicatorProps) 
                 {isCompleted ? (
                   <CheckCircle2 className="text-green-400" size={14} />
                 ) : isCurrent ? (
-                  <Loader2 className="text-[#eaf740] animate-spin" size={12} />
+                  <Loader2 className="text-primary animate-spin" size={12} />
                 ) : (
                   <Clock className="text-white/40" size={12} />
                 )}
               </div>
               <div className="min-w-0 flex-1">
                 <p className={`text-sm font-medium ${
-                  isCurrent ? "text-[#eaf740]" :
+                  isCurrent ? "text-primary" :
                   isCompleted ? "text-green-400" : "text-white/60"
                 }`}>
                   {step.label}

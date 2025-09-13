@@ -58,7 +58,7 @@ export function CustomConnectButton() {
               <button
                 onClick={openConnectModal}
                 type="button"
-                className="rounded-xl2 bg-[#eaf740] px-5 py-3 font-semibold text-black transition-opacity hover:opacity-90"
+                className="rounded-xl2 bg-primary px-5 py-3 font-semibold text-black transition-opacity hover:opacity-90"
               >
                 Connect Wallet
               </button>
@@ -71,7 +71,7 @@ export function CustomConnectButton() {
                 Wrong Network
               </button>
             ) : (
-              <div className="flex items-center gap-3 rounded-xl2 bg-[#eaf740] px-4 py-2.5 text-black">
+              <div className="flex items-center gap-3 rounded-xl2 bg-primary px-4 py-2.5 text-black">
                 <button
                   onClick={openChainModal}
                   type="button"

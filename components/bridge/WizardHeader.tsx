@@ -12,9 +12,9 @@ export function WizardHeader({ step }: { step: number }) {
               <div
                 className={`size-8 grid place-items-center rounded-full border ${
                   done
-                    ? "bg-[#eaf740] text-black border-[#eaf740]"
+                    ? "bg-primary text-black border-primary"
                     : active
-                    ? "border-[#eaf740]"
+                    ? "border-primary"
                     : "border-white/20"
                 }`}
               >
@@ -22,7 +22,7 @@ export function WizardHeader({ step }: { step: number }) {
               </div>
               <span
                 className={`text-sm ${
-                  active ? "text-[#eaf740]" : "text-white/60"
+                  active ? "text-primary" : "text-white/60"
                 }`}
               >
                 {label}

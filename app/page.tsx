@@ -112,7 +112,7 @@ export default function BridgePage() {
 
   return (
     <div className="grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
-      <div className="rounded-xl2 bg-[#1a1c1c] p-5 shadow-soft">
+      <div className="rounded-xl2 bg-card p-5 shadow-soft">
         <WizardHeader step={step} />
         {/* Step 1 */}
         {step === 1 && (
@@ -204,7 +204,7 @@ export default function BridgePage() {
                 className={`${isProcessing ? "w-full" : "flex-1"} rounded-xl2 px-4 py-3 font-semibold ${
                   isProcessing
                     ? "bg-white/10 text-white/40 cursor-not-allowed"
-                    : "bg-[#eaf740] text-black hover:opacity-90"
+                    : "bg-primary text-black hover:opacity-90"
                 }`}
               >
                 {isProcessing ? "Processing..." : "Bridge Tokens"}
@@ -218,7 +218,7 @@ export default function BridgePage() {
           <div className="space-y-4">
             <div className="rounded-xl2 border border-white/10 bg-black/30 p-4">
               <p className="text-lg font-semibold flex items-center gap-2">
-                <CheckCircle2 className="text-[#eaf740]" /> Bridge Submitted
+                <CheckCircle2 className="text-primary" /> Bridge Submitted
               </p>
               <p className="text-white/70 text-sm mt-1">
                 Your tokens are being bridged. The status will update
@@ -235,7 +235,7 @@ export default function BridgePage() {
         )}
       </div>
 
-      <div className="rounded-xl2 bg-[#1a1c1c] p-5 shadow-soft">
+      <div className="rounded-xl2 bg-card p-5 shadow-soft">
         <h3 className="mb-2 text-sm font-medium text-white/70">
           Bridge History
         </h3>

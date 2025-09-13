@@ -1,4 +1,16 @@
 @import "tailwindcss";
-@tailwind utilities;
 
-html, body { background: #000000; color: #fff; }
+@theme {
+  --color-bg: #000000;
+  --color-card: #1a1c1c;
+  --color-primary: #eaf740;
+
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.25);
+  /* --radius-xl2: 1.25rem; */
+}
+
+html,
+body {
+  background: var(--color-bg);
+  color: #fff;
+}
