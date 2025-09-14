@@ -54,7 +54,7 @@ export function HistoryList({
   }
 
   return (
-    <div className="space-y-4 max-h-[550px] overflow-y-auto">
+    <div className="space-y-4 max-h-[550px] overflow-y-auto scroll-hidden">
       {items.map((item, index) => {
         const fromChain = getChainInfo(item.fromChainId)
         const toChain = getChainInfo(item.toChainId)
@@ -97,17 +97,6 @@ export function HistoryList({
                 >
                   {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                 </span>
-                {item.id && (
-                  <a
-                    href={`https://sepolia.etherscan.io/tx/${item.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg bg-slate-600/50 hover:bg-slate-500/50 transition-colors"
-                    title="View on Explorer"
-                  >
-                    <ExternalLink className="w-3 h-3 text-slate-400" />
-                  </a>
-                )}
               </div>
             </div>
 

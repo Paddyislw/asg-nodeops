@@ -1,13 +1,13 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { useState } from "react";
 import { BRIDGE_CHAINS } from "@/lib/constants";
 import { TOKENS } from "@/lib/constants";
 import { useReadContract } from "wagmi";
 import type { Address } from "viem";
 import { formatAmount } from "@/lib/helper";
-import { CheckCircle2, Activity, X } from "lucide-react";
+import { CheckCircle2, Activity, X, AlertTriangle } from "lucide-react";
 import { HistoryList } from "@/components/bridge/HistoryList";
 import { TokenPicker } from "@/components/bridge/TokenPicker";
 import { NextBtn } from "@/components/bridge/NextBtn";
@@ -26,8 +26,13 @@ import { BackBtn } from "@/components/bridge/BackBtn";
 
 export default function BridgePage() {
   const { address, isConnected } = useAccount();
+  const chainId = useChainId();
 
   const [showStatusModal, setShowStatusModal] = useState(false);
+
+  // Check if user is on the correct chain for bridging
+  const isOnCorrectChain = chainId === BRIDGE_CHAINS.sepolia.id;
+  const canUseBridge = isConnected && isOnCorrectChain;
 
   // Create status callback to update the UI
   const onStatusUpdate = (status: string, description?: string) => {
@@ -110,7 +115,25 @@ export default function BridgePage() {
     }
   }
 
-  console.log("history", history);
+
+  // Wrong Network Warning Component
+  const WrongNetworkWarning = () => (
+    <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
+      <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+        <AlertTriangle className="text-red-400 w-8 h-8" />
+      </div>
+      <h3 className="text-lg font-semibold text-red-400 mb-2">
+        Wrong Network Detected
+      </h3>
+      <p className="text-red-200/80 text-sm leading-relaxed mb-4">
+        Currently we support USDC bridging from <strong>Ethereum Sepolia</strong> to <strong>Base Sepolia</strong> only.
+        Please switch to Ethereum Sepolia network to use the bridge.
+      </p>
+      <div className="text-xs text-red-300/70">
+        Current Network: {chainId === 1 ? 'Ethereum Mainnet' : chainId === 84532 ? 'Base Sepolia' : `Chain ${chainId}`}
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen p-4 md:p-6">
@@ -118,16 +141,23 @@ export default function BridgePage() {
         <div className="grid gap-6 md:grid-cols-2">
           {/* Bridge Card */}
           <div
-            className={`rounded-xl border transition-all duration-200 cursor-pointer border-border bg-card/50 hover:bg-card/80 shadow-lg"
-            `}
+            className={`rounded-xl border transition-all duration-200 border-border shadow-lg ${
+              canUseBridge
+                ? "cursor-pointer bg-card/50 hover:bg-card/80"
+                : "bg-card/30 opacity-75"
+            }`}
           >
             <div className="p-6 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-3 rounded-full bg-primary"></div>
+                <div className={`w-3 h-3 rounded-full ${canUseBridge ? "bg-primary" : "bg-red-500"}`}></div>
                 <h2 className="text-xl font-semibold text-foreground">
                   Bridge Tokens
                 </h2>
               </div>
+
+              {!canUseBridge ? (
+                <WrongNetworkWarning />
+              ) : (
 
               <div className="space-y-6 flex-1 flex flex-col">
                 <WizardHeader step={step} />
@@ -268,15 +298,35 @@ export default function BridgePage() {
                       </p>
                     </div>
 
+                    {/* Status Update Warning - Only show while monitoring */}
+                    {history.length > 0 && history[0].status === "pending" && (
+                      <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-5 h-5 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin flex-shrink-0 mt-0.5"></div>
+                          <div>
+                            <h4 className="text-sm font-medium text-yellow-400 mb-1">
+                              Monitoring Transaction Status
+                            </h4>
+                            <p className="text-yellow-200/80 text-xs leading-relaxed">
+                              Please don't close or reload this page. When your transaction completes,
+                              you'll be prompted for one more wallet confirmation to update the status.
+                              This ensures accurate tracking in your history.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <button
                       onClick={reset}
-                      className="flex gap-4 pt-4 flex-1 items-end justify-end w-full rounded-lg border border-border py-3 text-sm font-medium transition-all duration-200 hover:bg-accent/10 hover:border-accent/50 active:scale-[0.98]"
+                      className=" w-full rounded-lg border border-border py-3 text-sm font-medium transition-all duration-200 hover:bg-accent/10 hover:border-accent/50 active:scale-[0.98]"
                     >
                       Start New Bridge
                     </button>
                   </div>
                 )}
               </div>
+              )}
             </div>
           </div>
 

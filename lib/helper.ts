@@ -17,3 +17,16 @@ export const formatAmount = (v: bigint, decimals: number) =>
   (Number(v) / 10 ** decimals).toString();
 export const parseAmount = (v: string, decimals: number) =>
   BigInt(Math.floor(Number(v) * 10 ** decimals));
+
+export const getSupportedChainName = (id: number) => {
+  switch (id) {
+    case 11155111:
+      return "Sepolia Testnet";
+    case 84532:
+      return "Base Sepolia";
+    default:
+      return `Chain ${id}`;
+  }
+};
+
+export const isSupportedChain = (id: number) => [11155111, 84532].includes(id);

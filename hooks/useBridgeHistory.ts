@@ -50,19 +50,19 @@ export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
             toChainId: rawItem.toChain,
             token: rawItem.token,
             amount: (Number(rawItem.amount) / Math.pow(10, 6)).toString(),
-            status: "pending",
+            status: rawItem.status === 1 ? "completed" : "pending", // Use contract status if available
           }));
 
         
 
-          const statusPromises = convertedHistory.map((record) =>
-            monitorBridgeStatusInitial(record)
-          );
+          // Use contract status as single source of truth - no Circle API calls on page load
+          // Sort by timestamp descending (latest first)
+          const sortedHistory = convertedHistory.sort((a, b) => b.ts - a.ts);
+          setHistory(sortedHistory);
+          setIsLoadingHistory(false);
 
-          Promise.all(statusPromises).then((checkedRecords) => {
-            setHistory(checkedRecords);
-            setIsLoadingHistory(false);
-          });
+          // Don't monitor old pending transactions on page load
+          // Only monitor new transactions that are created during this session
         } else {
           setIsLoadingHistory(false);
         }
@@ -79,6 +79,20 @@ export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
         const status = await BridgeService.getBridgeStatus(record.id);
         const newStatus = getStatusText(status);
         const updatedRecord = { ...record, status: newStatus };
+
+        // Update contract if status is completed
+        if (newStatus === "completed") {
+          try {
+            await BridgeManager.updateBridgeStatus(
+              11155111, // Update on Sepolia (where we store records)
+              record.id as any,
+              1 // BridgeStatus.COMPLETED
+            );
+            console.log("✅ Contract updated with completed status for:", record.id);
+          } catch (error) {
+            console.warn("⚠️ Failed to update contract status:", error);
+          }
+        }
 
         if (newStatus === "pending") {
           monitorBridgeStatus(record.id);
@@ -103,12 +117,27 @@ export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
         const newStatus = getStatusText(status);
 
         if (newStatus !== "pending") {
-          setHistory((prevHistory) => {
-            const updatedItems = prevHistory.map((it) =>
-              it.id === messageHash ? { ...it, status: newStatus } : it
-            );
-            return updatedItems;
-          });
+          // Update the contract with the new status (only when actually changing from pending to completed)
+          if (newStatus === "completed") {
+            try {
+              await BridgeManager.updateBridgeStatus(
+                11155111, // Update on Sepolia (where we store records)
+                messageHash as any,
+                1 // BridgeStatus.COMPLETED
+              );
+              console.log("✅ Contract updated with completed status for:", messageHash);
+
+              // Update local state only after successful contract update
+              setHistory((prevHistory) => {
+                const updatedItems = prevHistory.map((it) =>
+                  it.id === messageHash ? { ...it, status: newStatus } : it
+                );
+                return updatedItems;
+              });
+            } catch (error) {
+              console.warn("⚠️ Failed to update contract status:", error);
+            }
+          }
           return;
         }
 
@@ -176,7 +205,7 @@ export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
       status: "pending",
     };
 
-    const items = [rec, ...history];
+    const items = [rec, ...history].sort((a, b) => b.ts - a.ts);
     setHistory(items);
 
     monitorBridgeStatus(result.bridgeId);

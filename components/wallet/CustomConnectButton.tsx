@@ -7,7 +7,6 @@ import { useEffect } from "react";
 
 // Optional: NodeBridge chain slug, agar kabhi tracking/URLs me chahiye ho
 const chainSlug: Record<number, string> = {
-  1: "mainnet",
   11155111: "sepolia",
   84532: "base-sepolia",
 };
@@ -58,7 +57,7 @@ export function CustomConnectButton() {
               <button
                 onClick={openConnectModal}
                 type="button"
-                className="rounded-xl2 bg-primary px-5 py-3 font-semibold text-black transition-opacity hover:opacity-90"
+                className="rounded-xl2 bg-primary px-5 py-3 font-semibold text-black transition-opacity hover:opacity-90 rounded-lg"
               >
                 Connect Wallet
               </button>
@@ -71,7 +70,7 @@ export function CustomConnectButton() {
                 Wrong Network
               </button>
             ) : (
-              <div className="flex items-center gap-3 rounded-xl2 bg-primary px-4 py-2.5 text-black">
+              <div className="flex items-center gap-3 rounded-xl2 bg-primary px-4 py-2.5 text-black rounded-lg">
                 <button
                   onClick={openChainModal}
                   type="button"
