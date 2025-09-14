@@ -153,7 +153,7 @@ interface AnalyticsDashboardProps {
   hasAdvancedAccess?: boolean
 }
 
-export function AnalyticsDashboard({ analytics, hasAccess, hasAdvancedAccess = false }: AnalyticsDashboardProps) {
+export function AnalyticsDashboard({ analytics, hasAccess }: AnalyticsDashboardProps) {
   if (!hasAccess) {
     return (
       <div className="bg-card/50 hover:bg-card/80 border-border rounded-lg p-8 border text-center">

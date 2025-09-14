@@ -1,6 +1,6 @@
 import type { Address } from "viem";
 import { getAddress } from "viem";
-import { mainnet, sepolia, baseSepolia } from "wagmi/chains";
+import {  sepolia, baseSepolia } from "wagmi/chains";
 
 const BRIDGE_CHAINS = {
   sepolia,

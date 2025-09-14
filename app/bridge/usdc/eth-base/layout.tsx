@@ -2,14 +2,7 @@ import type { Metadata } from 'next';
 import { BRIDGE_CHAINS, TOKENS } from '@/lib/constants';
 import { generateSEOMetadata } from '@/lib/seo-utils';
 
-interface BridgePageParams {
-  params: {
-    chain: string;
-    token: string;
-  };
-}
-
-export async function generateMetadata({ params }: BridgePageParams): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   const fromChain = BRIDGE_CHAINS.sepolia.name;
   const toChain = BRIDGE_CHAINS.baseSepolia.name;
   const tokenInfo = TOKENS[BRIDGE_CHAINS.sepolia.id]?.[0];

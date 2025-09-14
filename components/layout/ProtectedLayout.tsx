@@ -5,11 +5,8 @@ import { useEffect, useState } from "react";
 import { CustomConnectButton } from "@/components/wallet/CustomConnectButton";
 import {
   AlertCircle,
-  CheckCircle,
   Loader2,
-  Wifi,
   WifiOff,
-  Globe,
 } from "lucide-react";
 import Header from "./Header";
 

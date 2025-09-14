@@ -1,7 +1,4 @@
-import { getSupportedChainName, isSupportedChain } from "@/lib/helper";
-import { Globe } from "lucide-react";
 import { CustomConnectButton } from "../wallet/CustomConnectButton";
-import { useChainId } from "wagmi";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 
@@ -41,20 +38,20 @@ const Header = () => {
   );
 };
 
-const renderNetworkIndicator = () => {
-  const chainId = useChainId();
-  const isChainSupported = isSupportedChain(chainId);
-  return (
-    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/50 text-xs">
-      <Globe className="h-3 w-3" />
-      <span>{getSupportedChainName(chainId)}</span>
-      <div
-        className={`w-2 h-2 rounded-full ${
-          isChainSupported ? "bg-green-400" : "bg-red-400"
-        }`}
-      />
-    </div>
-  );
-};
+// const renderNetworkIndicator = () => {
+//   const chainId = useChainId();
+//   const isChainSupported = isSupportedChain(chainId);
+//   return (
+//     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/50 text-xs">
+//       <Globe className="h-3 w-3" />
+//       <span>{getSupportedChainName(chainId)}</span>
+//       <div
+//         className={`w-2 h-2 rounded-full ${
+//           isChainSupported ? "bg-green-400" : "bg-red-400"
+//         }`}
+//       />
+//     </div>
+//   );
+// };
 
 export default Header;

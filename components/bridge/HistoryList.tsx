@@ -1,6 +1,5 @@
 import type { BridgeRecord } from "@/types/bridge"
 import { BRIDGE_CHAINS, TOKENS } from "@/lib/constants"
-import { ExternalLink } from "lucide-react"
 
 export function HistoryList({
   items,

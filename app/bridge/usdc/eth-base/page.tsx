@@ -308,8 +308,8 @@ export default function BridgePage() {
                               Monitoring Transaction Status
                             </h4>
                             <p className="text-yellow-200/80 text-xs leading-relaxed">
-                              Please don't close or reload this page. When your transaction completes,
-                              you'll be prompted for one more wallet confirmation to update the status.
+                              Please don&apos;t close or reload this page. When your transaction completes,
+                              you&apos;ll be prompted for one more wallet confirmation to update the status.
                               This ensures accurate tracking in your history.
                             </p>
                           </div>
