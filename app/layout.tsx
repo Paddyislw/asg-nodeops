@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Web3Providers } from "@/lib/wagmi";
 import { ProtectedLayout } from "@/components/layout/ProtectedLayout";
-import StructuredData from "@/components/SEO/StructuredData";
+import StructuredData from "@/components/seo/StructuredData";
 import { generateSEOMetadata } from "@/lib/seo-utils";
 
 export const metadata: Metadata = generateSEOMetadata({

@@ -1,7 +1,7 @@
 "use client"
 
 import { useAccount } from "wagmi"
-import DashboardStructuredData from "@/components/SEO/DashboardStructuredData"
+import DashboardStructuredData from "@/components/seo/DashboardStructuredData"
 import { useState, useEffect } from "react"
 import { useNodeToken } from "@/hooks/useNodeToken"
 import {
