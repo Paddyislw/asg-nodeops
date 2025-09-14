@@ -1,8 +1,12 @@
-import { mainnet, sepolia, baseSepolia } from "wagmi/chains";
+import { sepolia, baseSepolia, mainnet } from "wagmi/chains";
 import type { Address } from "viem";
 import { CCTP_USDC_CONTRACTS } from "./contracts";
 
-export const SUPPORTED_CHAINS = [sepolia, baseSepolia, mainnet] as const;
+// Chains users can switch to and use for bridging
+export const SUPPORTED_CHAINS = [sepolia, baseSepolia] as const;
+
+// All chains including read-only ones (like mainnet for NODE token balance)
+export const ALL_CHAINS = [sepolia, baseSepolia, mainnet] as const;
 
 export const BRIDGE_CHAINS = {
   sepolia,

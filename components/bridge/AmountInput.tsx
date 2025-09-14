@@ -1,32 +1,40 @@
+"use client"
+
 export function AmountInput({
   value,
   onChange,
   balance,
   onMax,
 }: {
-  value: string;
-  onChange: (v: string) => void;
-  balance: string;
-  onMax: () => void;
+  value: string
+  onChange: (v: string) => void
+  balance: string
+  onMax: () => void
 }) {
   return (
-    <div>
-      <label className="mb-1 block text-sm text-white/70">Amount</label>
-      <div className="flex items-center gap-2">
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-foreground">Amount</label>
+
+      <div className="relative">
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="0.0"
-          className="flex-1 rounded-xl2 border border-white/10 bg-black/40 px-3 py-2"
+          className="w-full rounded-lg border border-border bg-input px-4 py-3.5 pr-20 text-sm font-medium text-foreground placeholder:text-muted-foreground transition-all duration-200 hover:border-accent/50 focus:border-primary"
         />
+
         <button
           onClick={onMax}
-          className="rounded-xl2 border border-white/10 px-3 py-2 text-sm hover:bg-white/5"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-all duration-200 hover:bg-accent/10 hover:border-accent/50 hover:text-accent active:scale-95"
         >
           Max
         </button>
       </div>
-      <p className="mt-1 text-xs text-white/60">Balance: {balance}</p>
+
+      <div className="flex items-center justify-between text-xs">
+        <span className="text-muted-foreground">Available Balance</span>
+        <span className="font-medium text-foreground">{balance}</span>
+      </div>
     </div>
-  );
+  )
 }
