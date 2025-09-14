@@ -121,7 +121,7 @@ export default function BridgePage() {
             className={`rounded-xl border transition-all duration-200 cursor-pointer border-border bg-card/50 hover:bg-card/80 shadow-lg"
             `}
           >
-            <div className="p-6">
+            <div className="p-6 h-full flex flex-col">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-3 h-3 rounded-full bg-primary"></div>
                 <h2 className="text-xl font-semibold text-foreground">
@@ -129,12 +129,12 @@ export default function BridgePage() {
                 </h2>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 flex-1 flex flex-col">
                 <WizardHeader step={step} />
 
                 {/* Step 1 - Chain Selection */}
                 {step === 1 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex-1 flex flex-col">
                     <ChainPicker
                       label="From"
                       type="from"
@@ -145,7 +145,7 @@ export default function BridgePage() {
                     />
 
 
-                    <div className="pt-4">
+                    <div className="flex gap-4 pt-4 flex-1 items-end justify-end">
                       <NextBtn
                         enabled={isConnected}
                         onClick={() => setStep(2)}
@@ -156,7 +156,7 @@ export default function BridgePage() {
 
                 {/* Step 2 - Token and Amount */}
                 {step === 2 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex-1 flex flex-col">
                     <TokenPicker
                       chainId={fromChainId}
                       value={token}
@@ -168,7 +168,7 @@ export default function BridgePage() {
                       balance={balance}
                       onMax={() => setAmount(balance)}
                     />
-                    <div className="flex gap-4 pt-4">
+                    <div className="flex gap-4 pt-4 flex-1 items-end justify-end">
                       <BackBtn onClick={() => setStep(1)} />
                       <NextBtn
                         enabled={!!amount && Number(amount) > 0}
@@ -180,7 +180,7 @@ export default function BridgePage() {
 
                 {/* Step 3 - Review and Execute */}
                 {step === 3 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex-1 flex flex-col">
                     <ReviewCard
                       fromChainId={fromChainId}
                       toChainId={toChainId}
@@ -199,7 +199,7 @@ export default function BridgePage() {
                     )}
 
                     <div
-                      className={`flex gap-4 pt-4 ${isProcessing ? "" : ""}`}
+                      className={`flex gap-4  flex-1 items-end justify-end pt-4 ${isProcessing ? "" : ""}`}
                     >
                       {!isProcessing && (
                         <BackBtn
@@ -253,7 +253,7 @@ export default function BridgePage() {
 
                 {/* Step 4 - Success */}
                 {step === 4 && (
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex-1 flex flex-col">
                     <div className="rounded-lg border border-chart-1/30 bg-chart-1/10 p-6 text-center">
                       <div className="w-16 h-16 rounded-full bg-chart-1/20 flex items-center justify-center mx-auto mb-4">
                         <CheckCircle2 className="text-chart-1 w-8 h-8" />
@@ -270,7 +270,7 @@ export default function BridgePage() {
 
                     <button
                       onClick={reset}
-                      className="w-full rounded-lg border border-border py-3 text-sm font-medium transition-all duration-200 hover:bg-accent/10 hover:border-accent/50 active:scale-[0.98]"
+                      className="flex gap-4 pt-4 flex-1 items-end justify-end w-full rounded-lg border border-border py-3 text-sm font-medium transition-all duration-200 hover:bg-accent/10 hover:border-accent/50 active:scale-[0.98]"
                     >
                       Start New Bridge
                     </button>
