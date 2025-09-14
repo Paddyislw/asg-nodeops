@@ -66,7 +66,7 @@ export function BridgeAnalytics({ hasAnalyticsAccess, totalAmount, totalTxns, tx
                   </tr>
                 </thead>
                 <tbody>
-                  {txns.slice(0, 10).map((txn, index) => (
+                  {txns.map((txn, index) => (
                     <tr key={index} className="border-t border-border hover:bg-background/50">
                       <td className="p-3">
                         <div className="font-mono text-foreground">

@@ -15,6 +15,7 @@ const Header = () => {
           {[
             { key: "1", label: "Bridge", value: "/bridge/usdc/eth-base" },
             { key: "2", label: "Dashboard", value: "/dashboard" },
+            { key: "3", label: "Instructions", value: "/instructions" },
           ].map((item) => (
             <a
               key={item.key}

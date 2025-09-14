@@ -81,21 +81,6 @@ Replace placeholder images (`/public/next.svg`) with:
 - Properly sized social media cards
 - Relevant page-specific images
 
-## TODO
-
-1. Replace placeholder images with actual branded images
-2. Add more specific structured data for transaction types
-3. Implement dynamic SEO for new routes as they're added
-4. Add analytics tracking for SEO performance
-
-## Testing
-
-Before deployment:
-1. Validate structured data using [Google's Structured Data Testing Tool](https://search.google.com/test/rich-results)
-2. Check meta tags using [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/)
-3. Verify Twitter cards using [Twitter's Card Validator](https://cards-dev.twitter.com/validator)
-4. Test canonical URLs and redirects
-
 ## Resources
 
 - [Next.js Metadata Documentation](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)

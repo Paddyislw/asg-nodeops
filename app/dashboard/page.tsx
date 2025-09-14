@@ -52,7 +52,7 @@ export default function NodeDashboardPage() {
     setError(null);
 
     try {
-      // Get analytics from BridgeHistory for Sepolia chain (11155111)
+      // Get all analytics from BridgeHistory for Sepolia chain (11155111)
       const analytics = await BridgeHistory.getBridgeAnalytics(11155111);
 
       const formattedData = {
