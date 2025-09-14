@@ -34,6 +34,4 @@ export const TOKENS: Record<
   ],
 };
 
-export const NODE_TOKEN_MAINNET = (process.env
-  .NEXT_PUBLIC_NODE_TOKEN_ADDRESS_MAINNET ||
-  "0x2f714d7b9a035d4ce24af8d9b6091c07e37f43fb") as Address; // $NODE mainnet (read-only)
+export const NODE_TOKEN_MAINNET = "0x2f714d7b9a035d4ce24af8d9b6091c07e37f43fb" as Address; // $NODE mainnet (read-only)
