@@ -29,8 +29,8 @@ export const config = createConfig({
   connectors,
   chains: ALL_CHAINS, // Include all chains for wagmi functionality
   transports: {
-    [ALL_CHAINS[0].id]: http("https://eth-sepolia.g.alchemy.com/v2/" + 'XGfGEEgHBrrKXLvKPA-QX'),
-    [ALL_CHAINS[1].id]: http("https://base-sepolia.g.alchemy.com/v2/" + 'XGfGEEgHBrrKXLvKPA-QX'),
+    [ALL_CHAINS[0].id]: http("https://eth-sepolia.g.alchemy.com/v2/" + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY),
+    [ALL_CHAINS[1].id]: http("https://base-sepolia.g.alchemy.com/v2/" + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY),
     [ALL_CHAINS[2].id]: http(process.env.NEXT_PUBLIC_RPC_MAINNET), // Mainnet for read-only NODE token balance
   },
   ssr: true,
