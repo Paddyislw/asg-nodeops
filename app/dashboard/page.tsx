@@ -1,6 +1,7 @@
 "use client"
 
 import { useAccount } from "wagmi"
+import DashboardStructuredData from "@/components/SEO/DashboardStructuredData"
 import { useState, useEffect } from "react"
 import { useNodeToken } from "@/hooks/useNodeToken"
 import {
@@ -94,6 +95,11 @@ export default function NodeDashboardPage() {
 
   return (
     <div className="min-h-screen  p-6">
+      <DashboardStructuredData
+        totalBridged={totalAmount}
+        totalTransactions={totalTxns}
+        tier={nodeData?.tier}
+      />
       <div className="max-w-6xl mx-auto space-y-8">
 
         <BridgeTabNavigation
