@@ -84,7 +84,7 @@ export default function NodeDashboardPage() {
     if (address) {
       fetchBridgeAnalytics();
     }
-  }, [address, fetchBridgeAnalytics]);
+  }, [address]);
 
   // Use the fetched data or defaults
   const totalAmount = bridgeData?.totalAmount || "0";
@@ -95,12 +95,14 @@ export default function NodeDashboardPage() {
     "overview" | "analytics" | "benefits"
   >("overview");
 
+  console.log("This page is getting rendered");
+
   if (!isConnected) {
     return <WalletConnectPrompt />;
   }
 
   return (
-    <div className="min-h-screen  p-6">
+    <div className="p-6">
       <DashboardStructuredData
         totalBridged={totalAmount}
         totalTransactions={totalTxns}

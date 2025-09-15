@@ -138,7 +138,7 @@ export default function BridgePage() {
   );
 
   return (
-    <div className="min-h-screen p-4 md:p-6">
+    <div className="p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid gap-6 md:grid-cols-2">
           {/* Bridge Card */}
