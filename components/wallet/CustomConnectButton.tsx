@@ -5,21 +5,17 @@ import { ChevronDown } from "lucide-react";
 import { useAccount, useChainId } from "wagmi";
 import { useEffect } from "react";
 
-// Optional: NodeBridge chain slug, agar kabhi tracking/URLs me chahiye ho
 const chainSlug: Record<number, string> = {
   11155111: "sepolia",
   84532: "base-sepolia",
 };
 
 export function CustomConnectButton() {
-  // ❗ setState ko render ke andar mat karo — wagmi hooks use karo:
   const { address, isConnected } = useAccount();
   const activeChainId = useChainId();
 
-  // yahan tum apni analytics / API calls fire kar sakte ho
   useEffect(() => {
     if (isConnected && address && activeChainId) {
-      // example: console / analytics
       console.log("User connected:", {
         walletAddress: address,
         chainId: String(activeChainId),

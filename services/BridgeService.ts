@@ -373,7 +373,7 @@ export class BridgeService {
           return { nonce, messageHash };
           
         } catch (error) {
-          // Skip this log if decoding fails
+          console.error('❌ Failed to parse MessageSent log:', error);
         }
       }
     }

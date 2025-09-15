@@ -58,7 +58,7 @@ export function BridgeAnalytics({ hasAnalyticsAccess, totalAmount, totalTxns, tx
           <div className="bg-card border border-border rounded-lg overflow-hidden shadow-sm">
             <div className="overflow-x-auto max-h-96 overflow-y-auto">
               <table className="w-full">
-                <thead className="bg-muted/30 sticky top-0 z-10">
+                <thead className="bg-black sticky top-0 z-10">
                   <tr className="border-b border-border">
                     <th className="text-left p-4 text-muted-foreground font-semibold text-sm">Transaction Hash</th>
                     <th className="text-right p-4 text-muted-foreground font-semibold text-sm">Amount</th>

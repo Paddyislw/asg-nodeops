@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { NodeTokenService, type NodeHolderData, type UserAnalytics } from "@/lib/node-service";
-import { type Address } from "viem";
 
 export function useNodeToken() {
   const { address } = useAccount();

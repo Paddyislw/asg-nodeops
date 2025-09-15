@@ -100,7 +100,7 @@ export function AmountInput({
         if (inputValue.includes('.')) {
           const parts = inputValue.split('.');
           if (parts[1] && parts[1].length > 6) {
-            return; // Don't update if more than 6 decimal places
+            return;
           }
         }
         onChange(inputValue);

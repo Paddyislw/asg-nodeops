@@ -37,7 +37,8 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const isValidRoute =
     pathname?.includes("/bridge") ||
     pathname?.includes("/dashboard") ||
-    pathname?.includes("/instructions");
+    pathname?.includes("/instructions") ||
+    pathname?.includes("/demo");
 
   // Show loading state
   if (!mounted || isConnecting || isConnectLoading) {
@@ -146,9 +147,9 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   // Connected user layout
   return (
     <div className="min-h-screen">
-      {isProtectedRoute && <Header />}
+      {isValidRoute && <Header />}
       {isProtectedRoute && renderBanner()}
-      {isProtectedRoute ? (
+      {isValidRoute ? (
         <main className="mx-auto max-w-5xl p-4">{children}</main>
       ) : (
         children
