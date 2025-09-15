@@ -42,8 +42,8 @@ export default function InstructionsPage() {
 
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  To bridge tokens, you'll need Sepolia USDC. Get free testnet
-                  USDC from Circle's official faucet.
+                  To bridge tokens, you&apos;ll need Sepolia USDC. Get free testnet
+                  USDC from Circle&apos;s official faucet.
                 </p>
 
                 <div className="rounded-lg border border-border bg-muted/20 p-4">
@@ -51,7 +51,7 @@ export default function InstructionsPage() {
                     <Info className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
                     <div className="space-y-2">
                       <p className="text-xs text-muted-foreground">
-                        You'll need to connect your wallet and request testnet
+                        You&apos;ll need to connect your wallet and request testnet
                         USDC. The faucet provides sufficient tokens for testing.
                       </p>
                     </div>
@@ -88,8 +88,8 @@ export default function InstructionsPage() {
 
             <div className="space-y-3">
               <p className="text-sm text-muted-foreground leading-relaxed">
-                You'll need Sepolia ETH to pay for gas fees when bridging your
-                tokens. Get free testnet ETH from Google Cloud's faucet.
+                You&apos;ll need Sepolia ETH to pay for gas fees when bridging your
+                tokens. Get free testnet ETH from Google Cloud&apos;s faucet.
               </p>
 
               <div className="rounded-lg border border-border bg-muted/20 p-4">

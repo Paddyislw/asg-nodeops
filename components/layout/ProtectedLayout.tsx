@@ -13,9 +13,9 @@ interface ProtectedLayoutProps {
 }
 
 export function ProtectedLayout({ children }: ProtectedLayoutProps) {
-  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
+  const {  isConnected, isConnecting, isDisconnected } = useAccount();
   const chainId = useChainId();
-  const { connectors, isPending: isConnectLoading } = useConnect();
+  const {  isPending: isConnectLoading } = useConnect();
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();

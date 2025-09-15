@@ -84,7 +84,7 @@ export default function NodeDashboardPage() {
     if (address) {
       fetchBridgeAnalytics();
     }
-  }, [address]);
+  }, [address, fetchBridgeAnalytics]);
 
   // Use the fetched data or defaults
   const totalAmount = bridgeData?.totalAmount || "0";
