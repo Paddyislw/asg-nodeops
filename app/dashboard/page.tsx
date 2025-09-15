@@ -86,7 +86,6 @@ export default function NodeDashboardPage() {
     }
   }, [address]);
 
-  // Use the fetched data or defaults
   const totalAmount = bridgeData?.totalAmount || "0";
   const totalTxns = bridgeData?.totalTxns || 0;
   const txns = bridgeData?.txns || [];

@@ -47,9 +47,6 @@ export class BridgeManager {
     console.log(`🌉 [INITIATE BRIDGE] Bridge parameters:`, params);
     console.log(`🌉 [INITIATE BRIDGE] User address: ${userAddress}`);
 
-    // Import your existing bridge service
-
-
     let result: BridgeResult;
 
     try {
@@ -60,7 +57,7 @@ export class BridgeManager {
       console.log(`✅ [INITIATE BRIDGE] Bridge result:`, result);
     } catch (bridgeError) {
       console.error(`❌ [INITIATE BRIDGE] CCTP bridge failed:`, bridgeError);
-      throw bridgeError; // Re-throw bridge errors immediately
+      throw bridgeError;
     }
 
     // STEP 2: Record in smart contract
@@ -82,7 +79,6 @@ export class BridgeManager {
         `⚠️ [INITIATE BRIDGE] Failed to record in contract, but bridge was successful:`,
         contractError
       );
-      // Don't throw here - the bridge succeeded, contract recording is secondary
     }
 
     console.log(
