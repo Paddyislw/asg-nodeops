@@ -59,35 +59,3 @@ export function useNodeToken() {
   };
 }
 
-export function useUserAnalytics() {
-  const { address } = useAccount();
-  const [analytics, setAnalytics] = useState<UserAnalytics | null>(null);
-
-  useEffect(() => {
-    if (!address) {
-      setAnalytics(null);
-      return;
-    }
-
-    const data = NodeTokenService.getUserAnalytics(address);
-    setAnalytics(data);
-  }, [address]);
-
-  const updateAnalytics = (
-    bridgeAmount: string,
-    fromChain: number,
-    toChain: number,
-    feesSaved: string
-  ) => {
-    if (address) {
-      NodeTokenService.updateUserAnalytics(address, bridgeAmount, fromChain, toChain, feesSaved);
-      const updated = NodeTokenService.getUserAnalytics(address);
-      setAnalytics(updated);
-    }
-  };
-
-  return {
-    analytics,
-    updateAnalytics,
-  };
-}

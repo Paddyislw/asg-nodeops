@@ -52,6 +52,7 @@ export default function BridgePage() {
     tokensOnFrom[0]?.address as Address | undefined
   );
   const [amount, setAmount] = useState("");
+  const [isAmountValid, setIsAmountValid] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
   const [bridgeStatus, setBridgeStatus] = useState<BridgeStatus>("idle");
@@ -75,6 +76,7 @@ export default function BridgePage() {
   function reset() {
     setStep(1);
     setAmount("");
+    setIsAmountValid(false);
     setToken(TOKENS[fromChainId]?.[0]?.address as Address);
     setBridgeStatus("idle");
     setError("");
@@ -197,11 +199,12 @@ export default function BridgePage() {
                       onChange={setAmount}
                       balance={balance}
                       onMax={() => setAmount(balance)}
+                      onValidationChange={setIsAmountValid}
                     />
                     <div className="flex gap-4 pt-4 flex-1 items-end justify-end">
                       <BackBtn onClick={() => setStep(1)} />
                       <NextBtn
-                        enabled={!!amount && Number(amount) > 0}
+                        enabled={isAmountValid}
                         onClick={() => setStep(3)}
                       />
                     </div>

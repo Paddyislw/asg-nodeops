@@ -54,36 +54,39 @@ export function BridgeAnalytics({ hasAnalyticsAccess, totalAmount, totalTxns, tx
 
       {txns.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium mb-3">Recent Transactions</h4>
-          <div className="bg-muted rounded-lg overflow-hidden">
-            <div className="overflow-x-auto max-h-64 overflow-y-auto">
-              <table className="w-full text-xs">
-                <thead className="bg-background sticky top-0">
-                  <tr>
-                    <th className="text-left p-3 text-muted-foreground font-medium">Transaction Hash</th>
-                    <th className="text-right p-3 text-muted-foreground font-medium">Amount</th>
-                    <th className="text-center p-3 text-muted-foreground font-medium">Action</th>
+          <h4 className="text-lg font-semibold mb-4 text-foreground">Recent Transactions</h4>
+          <div className="bg-card border border-border rounded-lg overflow-hidden shadow-sm">
+            <div className="overflow-x-auto max-h-96 overflow-y-auto">
+              <table className="w-full">
+                <thead className="bg-muted/30 sticky top-0 z-10">
+                  <tr className="border-b border-border">
+                    <th className="text-left p-4 text-muted-foreground font-semibold text-sm">Transaction Hash</th>
+                    <th className="text-right p-4 text-muted-foreground font-semibold text-sm">Amount</th>
+                    <th className="text-center p-4 text-muted-foreground font-semibold text-sm">Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {txns.slice(0, 10).map((txn, index) => (
-                    <tr key={index} className="border-t border-border hover:bg-background/50">
-                      <td className="p-3">
-                        <div className="font-mono text-foreground">
-                          {txn.txHash.slice(0, 5)}...{txn.txHash.slice(-5)}
+                <tbody className="divide-y divide-border">
+                  {txns.map((txn, index) => (
+                    <tr key={index} className="hover:bg-muted/20 transition-colors duration-150">
+                      <td className="p-4">
+                        <div className="font-mono text-sm text-foreground bg-muted/30 px-3 py-1.5 rounded-md inline-block">
+                          {txn.txHash.slice(0, 10)}...{txn.txHash.slice(-8)}
                         </div>
                       </td>
-                      <td className="p-3 text-right">
-                        <div className="text-foreground font-medium">${txn.amount}</div>
+                      <td className="p-4 text-right">
+                        <div className="text-foreground font-semibold text-sm">
+                          ${txn.amount}
+                        </div>
+                        <div className="text-muted-foreground text-xs">USDC</div>
                       </td>
-                      <td className="p-3 text-center">
+                      <td className="p-4 text-center">
                         <a
                           href={`https://sepolia.etherscan.io/tx/${txn.txHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-primary hover:text-primary/80 underline transition-colors"
+                          className="inline-flex items-center px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-md text-sm font-medium transition-all duration-200 hover:shadow-sm"
                         >
-                          View
+                          View on Etherscan
                         </a>
                       </td>
                     </tr>
