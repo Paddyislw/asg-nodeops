@@ -63,7 +63,7 @@ export default function InstructionsPage() {
               href="https://faucet.circle.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-primary text-black w-full rounded-lg border border-border hover:bg-muted/10 px-4 py-3 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 group"
+              className="bg-primary text-black w-full rounded-lg border border-border hover:bg-primary/90 px-4 py-3 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 group"
             >
               Get Sepolia USDC
               <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -108,7 +108,7 @@ export default function InstructionsPage() {
                 href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary text-black w-full rounded-lg border border-border hover:bg-muted/10 px-4 py-3 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 group"
+                className="bg-primary text-black w-full rounded-lg border border-border hover:bg-primary/90 px-4 py-3 text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 group"
               >
                 Get Sepolia ETH
                 <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
