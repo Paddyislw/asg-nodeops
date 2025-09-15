@@ -48,7 +48,7 @@ export default function DemoPage() {
           {/* Video Details */}
           <div className="space-y-4">
             <div className="rounded-lg border border-border bg-muted/20 p-4">
-              <h3 className="font-medium text-foreground mb-2">What's covered in this demo:</h3>
+              <h3 className="font-medium text-foreground mb-2">What&apos;s covered in this demo:</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Wallet connection and network switching</li>
                 <li>• Getting testnet tokens from faucets</li>

@@ -26,10 +26,10 @@ export const CURRENT_NODE_CONFIG = NODE_TOKEN_CONFIG.ethereum;
 
 // Tier thresholds - adjust these values as needed
 export const NODE_TIERS = {
-  BRONZE: BigInt("5000000"), // 5 USDC
-  SILVER: BigInt("8000000"), // 8 USDC
-  GOLD: BigInt("10000000"), // 10 USDC
-  DIAMOND: BigInt("100000000"), // 100 USDC
+  BRONZE: BigInt("5000000"), 
+  SILVER: BigInt("8000000"), 
+  GOLD: BigInt("10000000"), 
+  DIAMOND: BigInt("100000000"), 
 } as const;
 
 export type NodeTier = keyof typeof NODE_TIERS | "NONE";
