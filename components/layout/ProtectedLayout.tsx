@@ -18,11 +18,25 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const {  isPending: isConnectLoading } = useConnect();
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
+  const [connectionTimeout, setConnectionTimeout] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Add timeout for connection attempts
+  useEffect(() => {
+    if (isConnecting || isConnectLoading) {
+      const timer = setTimeout(() => {
+        setConnectionTimeout(true);
+      }, 10000); // 10 second timeout
+
+      return () => clearTimeout(timer);
+    } else {
+      setConnectionTimeout(false);
+    }
+  }, [isConnecting, isConnectLoading]);
 
   const getSupportedChains = () => [
     { id: 11155111, name: "Sepolia Testnet" },
@@ -40,8 +54,8 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
     pathname?.includes("/instructions") ||
     pathname?.includes("/demo");
 
-  // Show loading state
-  if (!mounted || isConnecting || isConnectLoading) {
+  // Show loading state with timeout handling
+  if (!mounted || ((isConnecting || isConnectLoading) && !connectionTimeout)) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -55,6 +69,47 @@ export function ProtectedLayout({ children }: ProtectedLayoutProps) {
                 ? "Loading application..."
                 : "Please confirm the connection in your wallet"}
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show timeout error with retry option
+  if (connectionTimeout && (isConnecting || isConnectLoading)) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-6 max-w-md mx-auto p-8">
+          <div className="space-y-4">
+            <AlertCircle className="h-16 w-16 text-yellow-500 mx-auto" />
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Connection Timeout</h2>
+              <p className="text-muted-foreground">
+                Wallet connection is taking longer than expected. This might be due to:
+              </p>
+              <ul className="text-sm text-muted-foreground mt-2 text-left space-y-1">
+                <li>• MetaMask popup was blocked or closed</li>
+                <li>• Wallet extension needs to be unlocked</li>
+                <li>• Network connectivity issues</li>
+              </ul>
+            </div>
+          </div>
+          <div className="space-y-3">
+            <button
+              onClick={() => {
+                setConnectionTimeout(false);
+                window.location.reload();
+              }}
+              className="w-full rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 font-medium transition-all duration-200"
+            >
+              Retry Connection
+            </button>
+            <button
+              onClick={() => setConnectionTimeout(false)}
+              className="w-full rounded-lg border border-border hover:bg-accent/10 px-6 py-3 font-medium transition-all duration-200"
+            >
+              Continue Without Wallet
+            </button>
           </div>
         </div>
       </div>
