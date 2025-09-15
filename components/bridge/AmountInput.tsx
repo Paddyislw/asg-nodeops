@@ -1,7 +1,7 @@
 "use client"
 
 import { useAccount, useBalance } from "wagmi";
-import { AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, ExternalLink } from "lucide-react";
 import { useMemo, useEffect } from "react";
 
 export function AmountInput({
@@ -115,6 +115,12 @@ export function AmountInput({
     ? "border-green-500 focus:border-green-500"
     : "border-border focus:border-primary";
 
+  // Check for zero balances to show faucet CTA
+  const hasZeroUSDC = parseFloat(balance) === 0;
+  const ethBalanceValue = ethBalance ? parseFloat(ethBalance.formatted) : 0;
+  const hasZeroETH = ethBalanceValue === 0;
+  const shouldShowFaucetCTA = hasZeroUSDC || hasZeroETH;
+
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-foreground">Amount</label>
@@ -184,6 +190,53 @@ export function AmountInput({
         <div className="flex items-center gap-2 text-xs text-green-500">
           <CheckCircle className="w-3 h-3" />
           <span>Amount is valid</span>
+        </div>
+      )}
+
+      {/* Faucet CTA for zero balances */}
+      {shouldShowFaucetCTA && (
+        <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4 space-y-3">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h4 className="text-sm font-medium text-yellow-400">
+                {hasZeroUSDC && hasZeroETH ? 'Get Test Tokens' : hasZeroUSDC ? 'Get USDC' : 'Get ETH'}
+              </h4>
+              <p className="text-xs text-yellow-200/80 leading-relaxed">
+                {hasZeroUSDC && hasZeroETH
+                  ? 'You need both USDC to bridge and ETH for gas fees. Get free testnet tokens from the faucets below.'
+                  : hasZeroUSDC
+                  ? 'You need USDC tokens to bridge. Get free testnet USDC from the faucet.'
+                  : 'You need ETH for gas fees. Get free testnet ETH from the faucet.'
+                }
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {hasZeroUSDC && (
+              <a
+                href="https://faucet.circle.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 rounded-md border border-yellow-500/30 bg-yellow-500/20 hover:bg-yellow-500/30 px-3 py-2 text-xs font-medium text-yellow-300 transition-all duration-200 flex items-center justify-center gap-1.5 group"
+              >
+                Get USDC
+                <ExternalLink className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            )}
+            {hasZeroETH && (
+              <a
+                href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 rounded-md border border-yellow-500/30 bg-yellow-500/20 hover:bg-yellow-500/30 px-3 py-2 text-xs font-medium text-yellow-300 transition-all duration-200 flex items-center justify-center gap-1.5 group"
+              >
+                Get ETH
+                <ExternalLink className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+              </a>
+            )}
+          </div>
         </div>
       )}
     </div>
