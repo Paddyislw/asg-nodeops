@@ -50,19 +50,13 @@ export function useBridgeHistory(onStatusUpdate?: BridgeStatusCallback) {
             toChainId: rawItem.toChain,
             token: rawItem.token,
             amount: (Number(rawItem.amount) / Math.pow(10, 6)).toString(),
-            status: rawItem.status === 1 ? "completed" : "pending", // Use contract status if available
+            status: rawItem.status === 1 ? "completed" : "pending",
           }));
 
-        
-
-          // Use contract status as single source of truth - no Circle API calls on page load
           // Sort by timestamp descending (latest first)
           const sortedHistory = convertedHistory.sort((a, b) => b.ts - a.ts);
           setHistory(sortedHistory);
           setIsLoadingHistory(false);
-
-          // Don't monitor old pending transactions on page load
-          // Only monitor new transactions that are created during this session
         } else {
           setIsLoadingHistory(false);
         }

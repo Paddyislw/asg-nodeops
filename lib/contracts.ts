@@ -63,8 +63,8 @@ export enum CCTPBridgeStatus {
 }
 
 export const BRIDGE_TRACKER_CONTRACTS = {
-  11155111: "0xf310eeEd90EEF3a408961D61Eb991C9017CE6EAd" as Address, // Sepolia deployment ✅
-  84532: "0xd5770B4f205E211c2b0EbE649d5b5dCa53CF7B0B" as Address, // Base Sepolia deployment
+  11155111: "0xf310eeEd90EEF3a408961D61Eb991C9017CE6EAd" as Address, 
+  84532: "0xd5770B4f205E211c2b0EbE649d5b5dCa53CF7B0B" as Address, 
 } as const;
 
 // For backward compatibility

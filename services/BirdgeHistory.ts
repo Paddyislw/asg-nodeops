@@ -42,7 +42,6 @@ export class BridgeHistory {
     }
 
     try {
-      // Try getting contract name first
       console.log(`🧪 [TEST CONTRACT] Calling NAME() function...`);
       const name = (await readContract(config, {
         abi: BRIDGE_HISTORY_ABI,
@@ -53,7 +52,6 @@ export class BridgeHistory {
 
       console.log(`✅ [TEST CONTRACT] Contract NAME: ${name}`);
 
-      // Try getting version
       console.log(`🧪 [TEST CONTRACT] Calling VERSION() function...`);
       const version = (await readContract(config, {
         abi: BRIDGE_HISTORY_ABI,
@@ -64,7 +62,6 @@ export class BridgeHistory {
 
       console.log(`✅ [TEST CONTRACT] Contract VERSION: ${version}`);
 
-      // Try getting user bridge count
       console.log(
         `🧪 [TEST CONTRACT] Calling getUserBridgeCount() function...`
       );
@@ -144,7 +141,6 @@ export class BridgeHistory {
       const amountWei = parseAmount(params.amount, params.decimals);
       console.log(`🔥 [RECORD BRIDGE] Amount in wei: ${amountWei.toString()}`);
 
-      // Log all parameters being sent to contract
       const contractParams = {
         messageHash: result.bridgeId,
         amount: amountWei.toString(),
