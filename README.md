@@ -1,6 +1,6 @@
 # NODE Bridge - Multi-Chain Token Bridge Platform
 
-A secure and efficient multi-chain token bridge platform that allows users to bridge TestUSDC tokens from Ethereum Sepolia to Base Sepolia, with premium features unlocked through NODE token holdings.
+A secure and   efficient multi-chain token bridge platform that allows users to bridge TestUSDC tokens from Ethereum Sepolia to Base Sepolia, with premium features unlocked through NODE token holdings.
 
 ## Features
 
